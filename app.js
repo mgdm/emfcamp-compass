@@ -1,4 +1,5 @@
 let currentLocation = [-2.3771088, 52.0407325];
+let pointMap;
 
 function haversine(lat1, lon1, lat2, lon2) {
     const R = 6371e3; // metres
@@ -69,48 +70,56 @@ function mapDegreesToHexDirection(bearing) {
         return "tl";
     }
 }
-    
 
-async function main() {
-    const pointMap = await getPoints();
+async function init() {
+    pointMap = await getPoints();
+    refresh();
+}
+
+async function refresh() {
     const closestPoints = findClosest(currentLocation, pointMap);
     const closest = closestPoints[0];
 
     document.getElementById("mc").innerHTML = closest[0];
 
+    const directions = ["tl", "tr", "ml", "mr", "br", "bl"];
     const occupied = new Set();
-    for (point of closestPoints.slice(1)) {
+    for (const point of closestPoints.slice(1)) {
         if (!occupied.has(point[1].direction) && point !== closest) {
             occupied.add(point[1].direction);
             document.getElementById(point[1].direction).innerHTML = point[0];
         }
     }
+
+    for (const direction of directions) {
+        if (!occupied.has(direction)) {
+            document.getElementById(direction).innerHTML = "";
+        }
+    }
 }
 
-// react to cursor key presses
-document.onkeydown = checkKey;
-
 function checkKey(e) {
-    e = e || window.event;
-
     if (e.keyCode == '38') {
         // up arrow
         currentLocation[1] += 0.0001;
+        refresh();
     }
     else if (e.keyCode == '40') {
         // down arrow
         currentLocation[1] -= 0.0001;
+        refresh();
     }
     else if (e.keyCode == '37') {
         // left arrow
         currentLocation[0] -= 0.0001;
+        refresh();
     }
     else if (e.keyCode == '39') {
         // right arrow
         currentLocation[0] += 0.0001;
+        refresh();
     }
-
-    main();
 }
 
-main();
+document.onkeydown = checkKey;
+init();
