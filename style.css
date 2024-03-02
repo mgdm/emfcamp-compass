@@ -1,0 +1,35 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+
+    background-color: black;
+    color: white;
+}
+
+#map {
+    text-align: center;
+}
+
+.hex {
+    display: inline-block;
+    vertical-align: middle;
+
+    width: 150px;
+    height: 150px;
+    margin: 0px;
+    padding: 0px; 
+
+    font-size: 50px;
+
+    background-color: #222;
+    text-align: center;
+    line-height: 150px;
+
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    margin-top: -35px;
+}
+
+div.first .hex {
+    margin-top: 0;
+}
